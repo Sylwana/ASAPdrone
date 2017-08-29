@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+<ul>
+     {% for message in object_list %}
+<li>{{message.content}} <a href="{{message.get_delete_url}}">usuń</a> </li>
+
+</ul>
+{% endfor %}
+{% endblock %}

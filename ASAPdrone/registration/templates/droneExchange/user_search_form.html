@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <form action="" method="POST"> {% csrf_token %}
+<h1>You're off to Great Places! So... get on your way!</h1>
+    {{ form }}
+        <input type="submit" value="Szukaj"/>
+    </form>
+
+<ol>
+
+
+    {% for detail in details %}
+        <a href = "{%  url 'user-details' pk=detail.person.id %}" > {{detail.person.username}}</a><br><br>
+
+            {% for footage in detail.person.userfootage_set.all  %}
+    <iframe src="{{ footage.link }}"></iframe> <br>
+ <br>
+            {%endfor %}
+    <br>
+    {% endfor %}
+
+{% for user in results %}
+
+    <a href = "{%  url 'user-details' pk=user.id %}" > {{user.username}}</a><br><br>
+
+{% endfor %}
+</ol>
+
+
+
+{% endblock %}

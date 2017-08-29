@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h2>{{ user.username }}'s console:</h2>
+
+        about me: {{ details.about_me }}<br>
+        pricing: {{ details.pricing }}<br>
+        video type: {{ details.video_type }}<br>
+
+            <br>
+<h3>My cities:</h3>
+<ul>
+{% for city in cities %}
+    <li>{{city.name}}</li> <br>
+{% endfor %}
+    </ul>
+<br>
+{% if add_details %}
+<a href = "{%  url 'user-add-details' pk=user.id %}" > add details</a>
+
+{% endif %}
+
+{% if edit_details %}
+
+<a href = "{%  url 'user-update-details' pk=user.id %}" > edit details</a>
+{% endif %}
+<br>
+<a href = "{%  url 'add-footage' %}" > add footage</a>
+
+
+<h3><a href = "{%  url 'main' %}" > Main page</a></h3>
+
+
+    {% endblock %}

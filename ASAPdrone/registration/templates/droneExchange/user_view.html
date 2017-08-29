@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>{{ user.username }}'s nest</h2>
+{% if details %}
+        about me: {{ details.about_me }}<br>
+        pricing: {{ details.pricing }} zł per flight<br>
+        video type: {{ details.video_type }}<br>
+{% endif %}
+
+    <h2>My footage:</h2>
+
+         {% for footage in footage_list %}
+
+            {{ footage.description }}<br>
+            <iframe width="560" height="315" src="{{ footage.link }}" frameborder="0" allowfullscreen></iframe>
+            <br>
+
+         {% endfor %}
+<br>
+<a href = "{%  url 'message' pk=user.id %}" > send a message</a>
+    {% endblock %}

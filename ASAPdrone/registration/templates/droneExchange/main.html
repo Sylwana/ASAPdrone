@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+    <h2>It's good to have you here!</h2>
+
+<h4>Latest masterpieces:</h4>
+         {% for footage in object_list %}
+
+
+<iframe src="{{ footage.link }}"></iframe>
+<br>
+
+<a href = "{%  url 'user-details' pk=footage.author_id %}" > {{footage.author}}</a><br><br>
+
+         {% endfor %}
+
+
+    {% endblock %}
+
