@@ -24,9 +24,9 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^logout/$', auth_views.logout, {'next_page': ('next','/')}, name='logout'),
     #url(r'^add-footage/$', views.UserFootageCreateView.as_view(), name='add-footage'),
-    url(r'^user/add_footage/$', views.UserFootageCreateView.as_view(), name='add-footage'),
+    url(r'^add_footage/$', views.UserFootageCreateView.as_view(), name='add-footage'),
     url(r'^accounts/', admin.site.urls),
-    url(r'^main/$', views.MainView.as_view(), name='main'),
+    url(r'^$', views.MainView.as_view(), name='main'),
     url(r'^user/(?P<pk>(\d)+)/$', views.UserView.as_view(), name='user-details'),
     url(r'^user/(?P<pk>(\d)+)/add_details/$', views.UserDetailsCreateView.as_view(), name='user-add-details'),
     url(r'^user/(?P<pk>(\d)+)/update_details/$', views.DetailsUpdateView.as_view(), name='user-update-details'),
@@ -38,5 +38,8 @@ urlpatterns = [
     url(r'^messages/$', views.MessagesView.as_view(), name='messages'),
     url(r'^delete-message/(?P<pk>(\d)+)', views.MessageDeleteView.as_view(),
         name='delete-message'),
+    url(r'^reply/(?P<pk>(\d)+)/$', views.ReplyView.as_view(), name='reply'),
+    url(r'^footage-delete/(?P<pk>(\d)+)/$', views.FootageDeleteView.as_view(), name='delete-footage'),
+    url(r'^edit-footage/(?P<pk>(\d)+)', views.FootageUpdateView.as_view(), name="edit-footage"),
 
 ]

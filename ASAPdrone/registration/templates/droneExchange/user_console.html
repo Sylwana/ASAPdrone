@@ -1,34 +1,61 @@
-{% extends 'base.html' %}
+{% extends 'base1.html' %}
+
+
 {% block content %}
 
     <h2>{{ user.username }}'s console:</h2>
 
-        about me: {{ details.about_me }}<br>
-        pricing: {{ details.pricing }}<br>
-        video type: {{ details.video_type }}<br>
+    {% if details %}
+        <div class="details">
+        <h3>about me:</h3>
+        <blockquote class="blockquote" ><p class="mb-0" > {{ details.about_me }}</p></blockquote>
+        <h3>pricing:</h3> <blockquote class="blockquote" ><p class="mb-0" >  {{ details.pricing }} zł per flight</p></blockquote>
+        <h3>video type:</h3> <blockquote class="blockquote" ><p class="mb-0" > {{ details.video_type }}</p></blockquote>
 
-            <br>
-<h3>My cities:</h3>
-<ul>
-{% for city in cities %}
-    <li>{{city.name}}</li> <br>
-{% endfor %}
-    </ul>
-<br>
+    {% endif %}
+
+    {% if cities %}
+    <h3>My cities:</h3>
+    <blockquote class="blockquote" ><ul class="list-inline">
+
+        {% for city in cities %}
+        <li class="list-inline-item">{{city.name}}</li>
+        {% endfor %}
+
+    </ul></blockquote>
+
+    {% endif %}
+            {% if footage_list %}
+    <h3>My footage:</h3>
+    <blockquote class="blockquote" >
+
+    <table>
+    {% for footage in footage_list %}
+        <tr><td>{{footage.description}} ( {{footage.link }} )</td>
+            <td><a href = "{%  url 'edit-footage' pk=footage.id %}" class="btn btn-primary" >Edit</a></td>
+            <td><a href = "{%  url 'delete-footage' pk=footage.id %}" class="btn btn-primary" >Delete</a></td>
+        </tr>
+    {% endfor %}
+
+    {% endif %}
+    </table>
+</blockquote>
+
+    <br>
 {% if add_details %}
-<a href = "{%  url 'user-add-details' pk=user.id %}" > add details</a>
+<a href = "{%  url 'user-add-details' pk=user.id %}" class="btn btn-primary" > add details</a>
 
 {% endif %}
 
 {% if edit_details %}
 
-<a href = "{%  url 'user-update-details' pk=user.id %}" > edit details</a>
+<a href = "{%  url 'user-update-details' pk=user.id %}" class="btn btn-primary" > edit details</a>
 {% endif %}
-<br>
-<a href = "{%  url 'add-footage' %}" > add footage</a>
 
 
-<h3><a href = "{%  url 'main' %}" > Main page</a></h3>
+<a href = "{%  url 'add-footage' %}"class="btn btn-primary" > add footage</a>
+
+
 
 
     {% endblock %}

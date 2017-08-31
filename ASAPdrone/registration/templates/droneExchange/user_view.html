@@ -1,22 +1,41 @@
-{% extends 'base.html' %}
+{% extends 'base1.html' %}
 {% block content %}
 
+<div class="details">
+ <br><br>
 <h2>{{ user.username }}'s nest</h2>
+  <a href="{%  url 'message' pk=user.id %}" class="btn btn-primary">send a message</a>
+     <br><br><br>
 {% if details %}
-        about me: {{ details.about_me }}<br>
-        pricing: {{ details.pricing }} zł per flight<br>
-        video type: {{ details.video_type }}<br>
-{% endif %}
 
-    <h2>My footage:</h2>
+    <h3>about me:</h3>
+    <blockquote class="blockquote" ><p class="mb-0" > <i>{{ details.about_me }}</i></p></blockquote>
+ <h3>pricing:</h3> <blockquote class="blockquote" ><p class="mb-0" >  {{ details.pricing }} zł per flight</p></blockquote>
+     <h3>My offer:</h3> <blockquote class="blockquote" ><p class="mb-0" > {{ details.video_type }} production</p></blockquote>
+{% endif %}
+{% if cities %}
+<h3>My cities:</h3>
+<blockquote class="blockquote" ><ul class="list-inline">
+{% for city in cities %}
+    <li class="list-inline-item">{{city.name}}</li>
+{% endfor %}
+
+    {% endif %}
+    </ul>
+</blockquote>
+
+    <h3>My footage:</h3>
 
          {% for footage in footage_list %}
 
-            {{ footage.description }}<br>
+
             <iframe width="560" height="315" src="{{ footage.link }}" frameborder="0" allowfullscreen></iframe>
             <br>
+description: {{ footage.description }}<br>
+
 
          {% endfor %}
 <br>
-<a href = "{%  url 'message' pk=user.id %}" > send a message</a>
+     </div>
+
     {% endblock %}

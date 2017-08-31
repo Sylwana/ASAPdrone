@@ -11,6 +11,12 @@ class UserFootage(models.Model):
     def __str__(self):
         return self.link
 
+    def get_delete_url(self):
+        return reverse('delete-footage', kwargs={'pk': self.pk})
+
+    def get_absolute_url(self):
+        return reverse('console', kwargs={'pk': self.author.pk})
+
 VIDEO_TYPES = [
     ('video', "video"),
     ('photography', "photography"),
@@ -33,6 +39,9 @@ class Details(models.Model):
 
     def __str__(self):
         return self.about_me
+
+    def get_absolute_url(self):
+        return reverse('console', kwargs={'pk': self.person.pk})
 
 class Message(models.Model):
     sender = models.ForeignKey(User, related_name="sender")

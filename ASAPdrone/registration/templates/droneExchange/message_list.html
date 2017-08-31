@@ -1,10 +1,25 @@
-{% extends 'base.html' %}
+{% extends 'base1.html' %}
 
     {% block content %}
-<ul>
-     {% for message in object_list %}
-<li>{{message.content}} <a href="{{message.get_delete_url}}">usuń</a> </li>
+<table>
+{% if messages_received %}
+   <th> Messages received:</th>
 
-</ul>
+     {% for message in messages_received %}
+    <tr><td>{{ message.sender }} writes: '<i>{{message.content}}</i>'<td> <a href="{{message.get_delete_url}}"class="btn btn-primary">usuń</a>
+        <td><a href = "{%  url 'reply' pk=message.sender_id %}"class="btn btn-primary" > reply</a></td></tr>
+
+
+{% endfor %}
+    {% endif %}
+
+
+<th>Messages sent:</th>
+
+
+     {% for message in messages_sent %}
+    <tr><td>'<i>{{message.content}}</i>' <td><a href="{{message.get_delete_url}}"class="btn btn-primary">usuń</a>
+
+</table>
 {% endfor %}
 {% endblock %}

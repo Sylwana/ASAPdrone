@@ -1,23 +1,36 @@
-{% extends 'base.html' %}
+{% extends 'base1.html' %}
 
 {% block content %}
 
     <form action="" method="POST"> {% csrf_token %}
-<h1>You're off to Great Places! So... get on your way!</h1>
-    {{ form }}
-        <input type="submit" value="Szukaj"/>
+
+    <section class="jumbotron text-center">
+      <div class="container">
+        <h1 class="jumbotron-heading">It's good to have you here!</h1>
+        <p class="lead text-muted"> A good snapshot stops a moment from running away.  So... get on your way! </p>
+        <p>
+             {{ form }}
+                  <input type="submit" class="btn btn-primary" value="Szukaj"/>
+
+        </p>
+      </div>
+    </section>
+
+
+
     </form>
 
 <ol>
 
 
     {% for detail in details %}
-        <a href = "{%  url 'user-details' pk=detail.person.id %}" > {{detail.person.username}}</a><br><br>
+    <blockquote class="blockquote" ><p class="mb-0" >
+        <p align="center"> <a href = "{%  url 'user-details' pk=detail.person.id %}" class="btn btn-primary" > {{detail.person.username}}</a></p><br>
 
             {% for footage in detail.person.userfootage_set.all  %}
-    <iframe src="{{ footage.link }}"></iframe> <br>
+        <p align="center"> <iframe src="{{ footage.link }}" width="600" height="400" align="center"></iframe></p> <br>
  <br>
-            {%endfor %}
+            {%endfor %}</blockquote>
     <br>
     {% endfor %}
 

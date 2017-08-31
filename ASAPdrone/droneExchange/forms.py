@@ -3,6 +3,8 @@ from droneExchange.models import UserFootage, Details, Message
 
 
 class UserFootageForm(forms.ModelForm):
+    link = forms.URLField(help_text='Insert a youtube link here.')
+    description = forms.CharField(max_length=35, help_text="The max length of the description is 35 digits.")
     class Meta:
         model = UserFootage
         fields = ["link", "description"]

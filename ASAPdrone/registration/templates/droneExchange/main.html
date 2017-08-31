@@ -1,20 +1,45 @@
-{% extends 'base.html' %}
+{% extends 'base1.html' %}
+
+
 {% block content %}
 
 
-    <h2>It's good to have you here!</h2>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-<h4>Latest masterpieces:</h4>
-         {% for footage in object_list %}
 
-
-<iframe src="{{ footage.link }}"></iframe>
+    <section class="jumbotron text-center">
+      <div class="container">
+        <h1 class="jumbotron-heading">It's good to have you here!</h1>
+        <p class="lead text-muted"> A good snapshot stops a moment from running away.  So... get on your way! </p>
+        <p>
+          <a href="{% url 'signup' %}" class="btn btn-primary">Sign up</a>
+          <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
+        </p>
+      </div>
+    </section>
+<div style="padding-left: 80px">
+<h2>
+  <small class="text-muted">Latest </small> masterpieces:
+</h2>
 <br>
+</div>
+<div class="album text-muted">
+      <div class="container">
 
-<a href = "{%  url 'user-details' pk=footage.author_id %}" > {{footage.author}}</a><br><br>
+        <div class="row">
 
-         {% endfor %}
+              {% for footage in object_list %}
+          <div class="card">
 
+              <iframe src="{{ footage.link }}" width="356" height="280" alt="Video footage"></iframe>
+            <p class="card-text"><a href = "{%  url 'user-details' pk=footage.author_id %}" class="btn btn-outline-primary"> {{footage.author}}</a></p>
+              <p><blockquote class="blockquote text-right">{{footage.description}}</blockquote></p>
+          </div>
+ {% endfor %}
+
+      </div>
+    </div>
 
     {% endblock %}
-

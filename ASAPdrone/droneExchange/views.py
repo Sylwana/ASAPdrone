@@ -30,9 +30,28 @@ class UserFootageCreateView(CreateView):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
+        url = obj.link
+        if len(url) > 35:
+            obj.link = url.replace("watch?v=", "embed/")
+        else:
+            obj.link = url.replace("https://youtu.be", "https://www.youtube.com/embed")
         obj.author = self.request.user
         obj.save()
         return HttpResponseRedirect(reverse('main'))
+
+
+class FootageUpdateView(UpdateView):
+    model = UserFootage
+    form_class = UserFootageForm
+
+
+class FootageDeleteView(DeleteView):
+    model = UserFootage
+
+    def get_success_url(self):
+        return reverse('console', kwargs={
+            'pk': int(self.request.user.id)
+        })
 
 
 class MainView(View):
@@ -64,13 +83,15 @@ class MainView(View):
 
 '''
 
-class UserView(View):
+class UserView(LoginRequiredMixin, View):
     def get(self, request, pk):
         current_user = User.objects.get(pk=pk)
         if Details.objects.all().filter(person_id=pk).exists():
             details = Details.objects.get(person=current_user)
+            cities = Details.objects.get(person_id=pk).cities.all()
             return render(request, 'droneExchange/user_view.html', {
                 'user': current_user,
+                'cities': cities,
                 'details': details,
                 'footage_list': UserFootage.objects.all().filter(author= pk)})
         else:
@@ -94,7 +115,7 @@ class UserDetailsCreateView(LoginRequiredMixin, CreateView):
         obj = form.save(commit=False)
         obj.person = self.request.user
         obj.save()
-        return HttpResponseRedirect(reverse('/main/'))
+        return HttpResponseRedirect(reverse('main'))
 
 
 class OldUserDetailsCreateView(View):
@@ -121,7 +142,6 @@ class OldUserDetailsCreateView(View):
 class DetailsUpdateView(UpdateView):
     model = Details
     form_class = EditDetailsForm
-    success_url = 'main'
 
     def get_object(self):
         return self.request.user.details
@@ -137,12 +157,15 @@ class ConsoleView(View):
             edit_details = 'edit details'
             cities = Details.objects.get(person_id=pk).cities.all()
 
+
             return render(request, 'droneExchange/user_console.html', {
                 'user': current_user,
                 'details': details,
                 'edit_details': edit_details,
                 'cities': cities,
-            })
+                'footage_list': UserFootage.objects.all().filter(author=pk)})
+
+
 
         else:
             add_details = 'add details'
@@ -150,6 +173,7 @@ class ConsoleView(View):
             return render(request, 'droneExchange/user_console.html', {
                 'user': current_user,
                 'add_details': add_details,
+                'footage_list': UserFootage.objects.all().filter(author=pk)
             })
 
 class UserSearchView(FormView):
@@ -175,7 +199,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('/main/')
+            return redirect('/')
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
@@ -200,7 +224,7 @@ class SendMessageView(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(reverse('main'))
 
 
-class MessagesView(ListView):
+class OldMessagesView(LoginRequiredMixin, ListView):
     model = Message
 
     def get_queryset(self):
@@ -209,8 +233,43 @@ class MessagesView(ListView):
             receiver=self.request.user)
         return queryset
 
+
+class MessagesView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        form = MessageForm
+        messages_received = Message.objects.all().filter(receiver=self.request.user)
+        messages_sent = Message.objects.all().filter(sender=self.request.user)
+
+        ctx = {
+            'messages_received': messages_received,
+            'messages_sent': messages_sent,
+        }
+
+        return render(request, 'droneExchange/message_list.html', ctx)
+
 class MessageDeleteView(DeleteView):
     model = Message
 
     def get_success_url(self):
         return reverse('messages')
+
+
+class ReplyView(LoginRequiredMixin, CreateView):
+    model = Message
+    form_class = MessageForm
+    template_name = 'droneExchange/generic_form.html'
+    #permission_required = 'droneExchange.add_details'
+    raise_exception = True
+
+    '''def handle_no_permission(self):
+        if self.request.user.is_authenticated and self.raise_exception:
+            raise PermissionDenied(self.get_permission_denied_message())
+        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())'''
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.sender = self.request.user
+        obj.receiver = User.objects.get(pk=self.kwargs['pk'])
+        obj.save()
+        return HttpResponseRedirect(reverse('main'))
