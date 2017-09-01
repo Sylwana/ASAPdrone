@@ -41,5 +41,6 @@ urlpatterns = [
     url(r'^reply/(?P<pk>(\d)+)/$', views.ReplyView.as_view(), name='reply'),
     url(r'^footage-delete/(?P<pk>(\d)+)/$', views.FootageDeleteView.as_view(), name='delete-footage'),
     url(r'^edit-footage/(?P<pk>(\d)+)', views.FootageUpdateView.as_view(), name="edit-footage"),
+    url(r'^recommend/(?P<pk>(\d)+)/$', views.RecommendView.as_view(), name='recommend'),
 
 ]

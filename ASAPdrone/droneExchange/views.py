@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from .forms import UserFootageForm, UserDetailsForm, EditDetailsForm, UserSearchForm, MessageForm
+from .forms import UserFootageForm, UserDetailsForm, EditDetailsForm, UserSearchForm, MessageForm, RecommendForm
 from django.views.generic import FormView, CreateView, UpdateView, ListView, DeleteView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.views import redirect_to_login
-from .models import UserFootage, Details, Message
+from .models import UserFootage, Details, Message, Recommendation
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, reverse
@@ -88,11 +88,13 @@ class UserView(LoginRequiredMixin, View):
         current_user = User.objects.get(pk=pk)
         if Details.objects.all().filter(person_id=pk).exists():
             details = Details.objects.get(person=current_user)
+            recommendations = Recommendation.objects.all().filter(receiver=current_user)
             cities = Details.objects.get(person_id=pk).cities.all()
             return render(request, 'droneExchange/user_view.html', {
                 'user': current_user,
                 'cities': cities,
                 'details': details,
+                'recommendations': recommendations,
                 'footage_list': UserFootage.objects.all().filter(author= pk)})
         else:
             return render(request, 'droneExchange/user_view.html', {
@@ -221,7 +223,9 @@ class SendMessageView(LoginRequiredMixin, CreateView):
         obj.sender = self.request.user
         obj.receiver = User.objects.get(pk=self.kwargs['pk'])
         obj.save()
-        return HttpResponseRedirect(reverse('main'))
+        return HttpResponseRedirect(reverse('user-details', kwargs={
+            'pk': int(self.kwargs['pk'])}
+        ))
 
 
 class OldMessagesView(LoginRequiredMixin, ListView):
@@ -273,3 +277,23 @@ class ReplyView(LoginRequiredMixin, CreateView):
         obj.receiver = User.objects.get(pk=self.kwargs['pk'])
         obj.save()
         return HttpResponseRedirect(reverse('main'))
+
+
+class RecommendView(LoginRequiredMixin, CreateView):
+    model = Recommendation
+    form_class = RecommendForm
+    template_name = 'droneExchange/generic_form.html'
+    raise_exception = True
+
+    '''def handle_no_permission(self):
+        if self.request.user.is_authenticated and self.raise_exception:
+            raise PermissionDenied(self.get_permission_denied_message())
+        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())'''
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.sender = self.request.user
+        obj.receiver = User.objects.get(pk=self.kwargs['pk'])
+        obj.save()
+        return HttpResponseRedirect(reverse('user-details', kwargs={
+            'pk': int(self.kwargs['pk'])}))

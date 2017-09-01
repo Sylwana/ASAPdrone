@@ -50,3 +50,9 @@ class Message(models.Model):
 
     def get_delete_url(self):
         return reverse('delete-message', kwargs={'pk': self.pk})
+
+
+class Recommendation(models.Model):
+    sender = models.ForeignKey(User, related_name="r_sender")
+    receiver = models.ForeignKey(User, related_name="r_receiver")
+    content = models.TextField()

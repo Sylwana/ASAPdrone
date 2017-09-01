@@ -2,11 +2,11 @@
 
 
 {% block content %}
-
-    <h2>{{ user.username }}'s console:</h2>
+ <div class="details">
+    <h1>{{ user.username }}'s console:</h1>
 
     {% if details %}
-        <div class="details">
+
         <h3>about me:</h3>
         <blockquote class="blockquote" ><p class="mb-0" > {{ details.about_me }}</p></blockquote>
         <h3>pricing:</h3> <blockquote class="blockquote" ><p class="mb-0" >  {{ details.pricing }} zł per flight</p></blockquote>
@@ -31,9 +31,10 @@
 
     <table>
     {% for footage in footage_list %}
-        <tr><td>{{footage.description}} ( {{footage.link }} )</td>
-            <td><a href = "{%  url 'edit-footage' pk=footage.id %}" class="btn btn-primary" >Edit</a></td>
-            <td><a href = "{%  url 'delete-footage' pk=footage.id %}" class="btn btn-primary" >Delete</a></td>
+        <tr><td>{{footage.description}} </td>
+            <td><a href = "{{footage.link }}" class=" btn " >Watch</button></a></td>
+            <td><a href = "{%  url 'edit-footage' pk=footage.id %}" button type="button" class=" btn " >Edit</button></a></td>
+            <td><a href = "{%  url 'delete-footage' pk=footage.id %}" class="btn btn-danger" >Delete</a></td>
         </tr>
     {% endfor %}
 
@@ -54,8 +55,6 @@
 
 
 <a href = "{%  url 'add-footage' %}"class="btn btn-primary" > add footage</a>
-
-
 
 
     {% endblock %}

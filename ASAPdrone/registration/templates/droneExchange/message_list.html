@@ -6,20 +6,22 @@
    <th> Messages received:</th>
 
      {% for message in messages_received %}
-    <tr><td>{{ message.sender }} writes: '<i>{{message.content}}</i>'<td> <a href="{{message.get_delete_url}}"class="btn btn-primary">usuń</a>
+    <tr><td>{{ message.sender }} writes: </td><td>'<i>{{message.content}}</i>'<td> <a href="{{message.get_delete_url}}"class="btn btn-primary">usuń</a></td>
         <td><a href = "{%  url 'reply' pk=message.sender_id %}"class="btn btn-primary" > reply</a></td></tr>
 
 
 {% endfor %}
     {% endif %}
 
-
+{% if messages_received %}
 <th>Messages sent:</th>
 
 
      {% for message in messages_sent %}
-    <tr><td>'<i>{{message.content}}</i>' <td><a href="{{message.get_delete_url}}"class="btn btn-primary">usuń</a>
-
-</table>
+    <tr><td>to {{message.receiver}}: </td><td>'<i>{{message.content}}</i>'</td> <td><a href="{{message.get_delete_url}}"class="btn btn-primary">usuń</a></td></tr>
 {% endfor %}
+    {% endif %}
+
+
+    </table>
 {% endblock %}

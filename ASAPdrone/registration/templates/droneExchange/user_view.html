@@ -3,8 +3,9 @@
 
 <div class="details">
  <br><br>
-<h2>{{ user.username }}'s nest</h2>
+<h1>{{ user.username }}'s nest</h1>
   <a href="{%  url 'message' pk=user.id %}" class="btn btn-primary">send a message</a>
+      <a href="{%  url 'recommend' pk=user.id %}" class="btn btn-success">recommend this user</a>
      <br><br><br>
 {% if details %}
 
@@ -37,5 +38,11 @@ description: {{ footage.description }}<br>
          {% endfor %}
 <br>
      </div>
+   <blockquote class="blockquote ">
+    {% for post in recommendations %}
+    <p class="mb-0">{{ post.content }} </p> <footer class="blockquote-footer">{{post.sender}}</footer>
+        {% endfor %}
+ </blockquote>
+
 
     {% endblock %}

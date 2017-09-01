@@ -1,5 +1,5 @@
 from django import forms
-from droneExchange.models import UserFootage, Details, Message
+from droneExchange.models import UserFootage, Details, Message, Recommendation
 
 
 class UserFootageForm(forms.ModelForm):
@@ -52,4 +52,10 @@ class UserSearchForm(forms.Form):
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
+        fields = ["content"]
+
+
+class RecommendForm(forms.ModelForm):
+    class Meta:
+        model = Recommendation
         fields = ["content"]
