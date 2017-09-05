@@ -13,10 +13,12 @@
       <div class="container">
         <h1 class="jumbotron-heading">It's good to have you here!</h1>
         <p class="lead text-muted"> A good snapshot stops a moment from running away.  So... get on your way! </p>
-        <p>
+        {% if not current_user %}
+          <p>
           <a href="{% url 'signup' %}" class="btn btn-primary">Sign up</a>
           <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
         </p>
+          {% endif %}
       </div>
     </section>
 <div style="padding-left: 80px">
@@ -34,7 +36,7 @@
           <div class="card">
 
               <iframe src="{{ footage.link }}" width="356" height="280" alt="Video footage"></iframe>
-            <p class="card-text"><a href = "{%  url 'user-details' pk=footage.author_id %}" class="btn btn-outline-primary"> {{footage.author}}</a></p>
+            <p class="card-text">Added by <a href = "{%  url 'user-details' pk=footage.author_id %}" > {{footage.author}}</a></p>
               <p><blockquote class="blockquote text-right">{{footage.description}}</blockquote></p>
           </div>
  {% endfor %}

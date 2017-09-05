@@ -30,6 +30,7 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
+
 class Details(models.Model):
     person = models.OneToOneField(User)
     about_me = models.TextField()
@@ -42,6 +43,7 @@ class Details(models.Model):
 
     def get_absolute_url(self):
         return reverse('console', kwargs={'pk': self.person.pk})
+
 
 class Message(models.Model):
     sender = models.ForeignKey(User, related_name="sender")

@@ -49,6 +49,7 @@ class UserSearchForm(forms.Form):
     maximum_price = forms.IntegerField(initial=1000)
 
 
+
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
