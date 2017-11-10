@@ -23,11 +23,6 @@ class UserFootageCreateView(CreateView):
     #permission_required = 'droneExchange.add_userfootage'
     #raise_exception = True
 
-    '''def handle_no_permission(self):
-        if self.request.user.is_authenticated and self.raise_exception:
-            raise PermissionDenied(self.get_permission_denied_message())
-        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())'''
-
     def form_valid(self, form):
         obj = form.save(commit=False)
         url = obj.link
@@ -38,6 +33,12 @@ class UserFootageCreateView(CreateView):
         obj.author = self.request.user
         obj.save()
         return HttpResponseRedirect(reverse('main'))
+    
+    
+    '''def handle_no_permission(self):
+        if self.request.user.is_authenticated and self.raise_exception:
+            raise PermissionDenied(self.get_permission_denied_message())
+        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())'''
 
 
 class FootageUpdateView(UpdateView):
@@ -65,24 +66,6 @@ class MainView(View):
 
         return render(request,'droneExchange/main.html', ctx)
 
-'''
-    def get_queryset(self):
-        queryset = super().get_queryset()  # to na razie zadziała jak oryginana metoda
-        queryset = queryset.filter(receiver_id=int(self.kwargs['student_id']))  # dobierz się do Id. poza tym kwargs to str
-        return queryset
-
-'''
-'''
-    class StudentNoticeDeleteView(DeleteView):
-        model = StudentNotice
-
-        def get_success_url(self):
-            return reverse('student-notice-list', kwargs={
-                'student_id': int(self.kwargs['student_id'])
-            })
-
-'''
-
 class UserView(LoginRequiredMixin, View):
     def get(self, request, pk):
         current_user = User.objects.get(pk=pk)
@@ -107,11 +90,6 @@ class UserDetailsCreateView(LoginRequiredMixin, CreateView):
     # template_name = 'exercises/generic_form.html'
     #permission_required = 'droneExchange.add_details'
     raise_exception = True
-
-    '''def handle_no_permission(self):
-        if self.request.user.is_authenticated and self.raise_exception:
-            raise PermissionDenied(self.get_permission_denied_message())
-        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())'''
 
     def form_valid(self, form):
         obj = form.save(commit=False)
@@ -139,8 +117,6 @@ class OldUserDetailsCreateView(View):
             obj.save()
             return HttpResponseRedirect(reverse('main'))
 
-
-
 class DetailsUpdateView(UpdateView):
     model = Details
     form_class = EditDetailsForm
@@ -166,8 +142,6 @@ class ConsoleView(View):
                 'edit_details': edit_details,
                 'cities': cities,
                 'footage_list': UserFootage.objects.all().filter(author=pk)})
-
-
 
         else:
             add_details = 'add details'
@@ -213,11 +187,6 @@ class SendMessageView(LoginRequiredMixin, CreateView):
     #permission_required = 'droneExchange.add_details'
     raise_exception = True
 
-    '''def handle_no_permission(self):
-        if self.request.user.is_authenticated and self.raise_exception:
-            raise PermissionDenied(self.get_permission_denied_message())
-        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())'''
-
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.sender = self.request.user
@@ -227,7 +196,6 @@ class SendMessageView(LoginRequiredMixin, CreateView):
             'pk': int(self.kwargs['pk'])}
         ))
 
-
 class OldMessagesView(LoginRequiredMixin, ListView):
     model = Message
 
@@ -236,7 +204,6 @@ class OldMessagesView(LoginRequiredMixin, ListView):
         queryset = queryset.filter(
             receiver=self.request.user)
         return queryset
-
 
 class MessagesView(LoginRequiredMixin, View):
 
@@ -266,11 +233,6 @@ class ReplyView(LoginRequiredMixin, CreateView):
     #permission_required = 'droneExchange.add_details'
     raise_exception = True
 
-    '''def handle_no_permission(self):
-        if self.request.user.is_authenticated and self.raise_exception:
-            raise PermissionDenied(self.get_permission_denied_message())
-        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())'''
-
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.sender = self.request.user
@@ -285,10 +247,6 @@ class RecommendView(LoginRequiredMixin, CreateView):
     template_name = 'droneExchange/generic_form.html'
     raise_exception = True
 
-    '''def handle_no_permission(self):
-        if self.request.user.is_authenticated and self.raise_exception:
-            raise PermissionDenied(self.get_permission_denied_message())
-        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())'''
 
     def form_valid(self, form):
         obj = form.save(commit=False)
